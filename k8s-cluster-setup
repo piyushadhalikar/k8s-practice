@@ -1,1 +1,12 @@
-Before worker node joins cluster
+Output on Master Node Before worker node joins cluster
+
+kubectl get nodes
+NAME              STATUS   ROLES           AGE     VERSION
+ip-172-31-1-189   Ready    control-plane   3m34s   v1.29.15
+
+Output on Master Node After worker node joins through token
+
+kubectl get nodes
+NAME              STATUS   ROLES           AGE     VERSION
+ip-172-31-1-189   Ready    control-plane   5m21s   v1.29.15
+ip-172-31-11-50   Ready    <none>          22s     v1.29.15
