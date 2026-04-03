@@ -1,0 +1,82 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: nginx-pod
+  namespace: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
+    ports:
+    - containerPort: 80 #nginx runs on port 80
+
+Output:
+1. To create and apply manifest
+  kubectl apply -f pod.yml 
+  pod/nginx-pod created
+
+2. pod created in namespace nginx
+  kubectl get pods -n nginx
+  NAME        READY   STATUS    RESTARTS   AGE
+  nginx-pod   1/1     Running   0          70s
+
+3. connect to pod
+  kubectl exec -it nginx-pod -n nginx -- bash
+  root@nginx-pod:/#               
+
+4. to get details of pod
+  kubectl describe pod/nginx-pod -n nginx
+  Name:             nginx-pod
+  Namespace:        nginx
+  Priority:         0
+  Service Account:  default
+  Node:             ip-172-31-11-50/172.31.11.50
+  Start Time:       Fri, 03 Apr 2026 15:28:45 +0000
+  Labels:           <none>
+  Annotations:      cni.projectcalico.org/containerID: 7a169f8494c7fe99b77e9e8fefc17bdb0fc6e5be654ebb5c46b462b5b09da883
+                    cni.projectcalico.org/podIP: 192.168.153.132/32
+                    cni.projectcalico.org/podIPs: 192.168.153.132/32
+  Status:           Running
+  IP:               192.168.153.132
+  IPs:
+    IP:  192.168.153.132
+  Containers:
+    nginx:
+      Container ID:   containerd://d12fd0af6c5302e857f35d092d2980fd1404e23d0575a160f04019fbaf6973d2
+      Image:          nginx:latest
+      Image ID:       docker.io/library/nginx@sha256:7150b3a39203cb5bee612ff4a9d18774f8c7caf6399d6e8985e97e28eb751c18
+      Port:           80/TCP
+      Host Port:      0/TCP
+      State:          Running
+        Started:      Fri, 03 Apr 2026 15:28:47 +0000
+      Ready:          True
+      Restart Count:  0
+      Environment:    <none>
+      Mounts:
+        /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-8bshv (ro)
+  Conditions:
+    Type                        Status
+    PodReadyToStartContainers   True 
+    Initialized                 True 
+    Ready                       True 
+    ContainersReady             True 
+    PodScheduled                True 
+  Volumes:
+    kube-api-access-8bshv:
+      Type:                    Projected (a volume that contains injected data from multiple sources)
+      TokenExpirationSeconds:  3607
+      ConfigMapName:           kube-root-ca.crt
+      ConfigMapOptional:       <nil>
+      DownwardAPI:             true
+  QoS Class:                   BestEffort
+  Node-Selectors:              <none>
+  Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                               node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+  Events:
+    Type    Reason     Age   From               Message
+    ----    ------     ----  ----               -------
+    Normal  Scheduled  16m   default-scheduler  Successfully assigned nginx/nginx-pod to ip-172-31-11-50
+    Normal  Pulling    16m   kubelet            Pulling image "nginx:latest"
+    Normal  Pulled     16m   kubelet            Successfully pulled image "nginx:latest" in 1.227s (1.227s including waiting)
+    Normal  Created    16m   kubelet            Created container: nginx
+    Normal  Started    16m   kubelet            Started container nginx
