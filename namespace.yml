@@ -1,0 +1,19 @@
+kind: Namespace
+apiVersion: v1
+metadata:   #Object
+  name: nginx
+
+
+Output:
+1.  to create and apply 
+  kubectl apply -f namespace.yml 
+  namespace/nginx created
+  
+2. kubectl get ns
+  NAME              STATUS   AGE
+  default           Active   24h
+  kube-node-lease   Active   24h
+  kube-public       Active   24h
+  kube-system       Active   24h
+  nginx             Active   24s
+
