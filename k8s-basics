@@ -1,0 +1,44 @@
+1. Create namespace 
+  kubectl create ns nginx
+  namespace/nginx created
+
+2. Show all namespace
+  kubectl get ns
+  NAME              STATUS   AGE
+  default           Active   23h
+  kube-node-lease   Active   23h
+  kube-public       Active   23h
+  kube-system       Active   23h
+  nginx             Active   20s
+
+3. Create pod
+  kubectl run nginx --image=nginx
+  pod/nginx created
+
+4. Show all pods
+  kubectl get pods
+  NAME    READY   STATUS    RESTARTS   AGE
+  nginx   1/1     Running   0          3m11s
+
+5. Delete pod
+  kubectl delete pod nginx
+  pod "nginx" deleted
+
+6. Create pod in namespace
+  kubectl run nginx --image=nginx -n nginx
+  pod/nginx created
+
+7. To view pods in specific namespace
+  kubectl get pods -n nginx
+  NAME    READY   STATUS    RESTARTS   AGE
+  nginx   1/1     Running   0          37s
+
+8. Delete pod in a namespace
+  kubectl delete pod nginx -n nginx
+  pod "nginx" deleted
+
+9. Delete namespace
+  kubectl delete ns nginx
+  namespace "nginx" deleted
+
+
