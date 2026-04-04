@@ -1,0 +1,38 @@
+kind: ReplicaSet
+apiVersion: apps/v1
+metadata:
+  name: nginx-repicasets
+  namespace: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+
+  template:
+    metadata:
+      name: nginx-rep-pod
+      labels:
+        app: nginx
+
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+
+#Output:
+
+1. apply replicasets
+  kubectl apply -f replicasets.yml 
+  replicaset.apps/nginx-repicasets created
+2. to view replicasets
+  kubectl get replicasets -n nginx
+  NAME               DESIRED   CURRENT   READY   AGE
+  nginx-repicasets   2         2         2       18s
+3. pods
+  kubectl get pods -n nginx
+  NAME                     READY   STATUS    RESTARTS   AGE
+  nginx-repicasets-6pjw4   1/1     Running   0          2m43s
+  nginx-repicasets-j4whm   1/1     Running   0          2m43s
