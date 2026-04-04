@@ -1,0 +1,38 @@
+kind: DaemonSet
+apiVersion: apps/v1
+metadata:
+  name: nginx-daemonsets
+  namespace: nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+
+  template:
+    metadata:
+      name: nginx-daemon-pod
+      labels:
+        app: nginx
+
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80 
+
+#Output:
+
+1. apply/create daemonset
+  kubectl apply -f daemonsets.yml 
+  daemonset.apps/nginx-daemonsets created
+
+2. view pods on which node
+  kubectl get pods -n nginx -o wide
+  NAME                     READY   STATUS    RESTARTS   AGE   IP                NODE              NOMINATED NODE   READINESS GATES
+  nginx-daemonsets-77cpx   1/1     Running   0          19s   192.168.153.148   ip-172-31-11-50   <none>           <none>
+
+3. view daemonsets
+  kubectl get daemonsets -n nginx
+  NAME               DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+  nginx-daemonsets   1         1         1       1            1           <none>          2m57s
