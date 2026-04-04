@@ -61,5 +61,16 @@ spec:
   NAME                                READY   STATUS    RESTARTS   AGE
   nginx-deployment-6dbd7f7b8c-42njn   1/1     Running   0          4m14s
   
+8. to set/update image
+  kubectl set image deployment/nginx-deployment -n nginx nginx=nginx:1.29.7
+  deployment.apps/nginx-deployment image updated
+
+9. previous container running until new gets ready 
+  kubectl get pods -n nginx
+  NAME                                READY   STATUS              RESTARTS   AGE
+  nginx-deployment-5875f744cc-676qq   0/1     ContainerCreating   0          2s
+  nginx-deployment-5875f744cc-xcz5c   1/1     Running             0          4s
+  nginx-deployment-6dbd7f7b8c-42njn   1/1     Running             0          32m
+
 
 
