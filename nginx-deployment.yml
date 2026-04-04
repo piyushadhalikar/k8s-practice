@@ -72,5 +72,8 @@ spec:
   nginx-deployment-5875f744cc-xcz5c   1/1     Running             0          4s
   nginx-deployment-6dbd7f7b8c-42njn   1/1     Running             0          32m
 
+10. to delete deployment from cluster
+  kubectl delete -f deployment.yml 
+  deployment.apps "nginx-deployment" deleted
 
 
