@@ -4,7 +4,7 @@ metadata:   #Object
   name: nginx
 
 
-Output:
+# Output:
 1.  to create and apply 
   kubectl apply -f namespace.yml 
   namespace/nginx created
