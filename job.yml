@@ -1,0 +1,39 @@
+kind: Job
+apiVersion: batch/v1
+metadata:
+  name: demo-job
+  namespace: nginx
+spec:
+  completions: 1
+  parallelism: 2
+  template:
+    metadata:
+      name: demo-job-pod
+      labels:
+        app: batch-task
+    spec:
+      containers:
+      - name: batch-container
+        image: busybox:latest  #busybox used to run commands
+        command: ["sh", "-c", "echo Hello everyone! && sleep 10"]
+      restartPolicy: Never
+
+#Output:
+1. apply/create job
+  kubectl apply -f job.yml 
+  job.batch/demo-job created
+
+2. to view jobs
+  kubectl get job -n nginx
+  NAME       COMPLETIONS   DURATION   AGE
+  demo-job   1/1           18s        34s
+
+3. pod status after job completion
+  kubectl get pods -n nginx
+  NAME             READY   STATUS      RESTARTS   AGE
+  demo-job-qlrj4   0/1     Completed   0          62s
+
+4. view job output in log
+  kubectl logs pod/demo-job-qlrj4 -n nginx
+  Hello everyone!
+  
