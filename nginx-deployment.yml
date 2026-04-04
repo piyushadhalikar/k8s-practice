@@ -1,0 +1,65 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nginx-deployment
+  namespace: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+
+  template:
+    metadata:
+      name: nginx-dep-pod
+      labels:
+        app: nginx
+
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+
+#Output:
+1. apply deployment
+  kubectl apply -f deployment.yml 
+  deployment.apps/nginx-deployment created
+
+2. to view deployments
+  kubectl get deployment -n nginx
+  NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+  nginx-deployment   2/2     2            2           81s
+
+3. 2 pods created because of replicas
+  
+  kubectl get pods -n nginx
+  NAME                                READY   STATUS    RESTARTS   AGE
+  nginx-deployment-6dbd7f7b8c-42njn   1/1     Running   0          98s
+  nginx-deployment-6dbd7f7b8c-mjxtp   1/1     Running   0          98s
+
+4. to scale up deployment
+  kubectl scale deployment/nginx-deployment -n nginx --replicas=5
+  deployment.apps/nginx-deployment scaled
+
+5. instead of 2 now 5 pods are running
+  kubectl get pods -n nginx
+  NAME                                READY   STATUS    RESTARTS   AGE
+  nginx-deployment-6dbd7f7b8c-42njn   1/1     Running   0          3m24s
+  nginx-deployment-6dbd7f7b8c-5dhtm   1/1     Running   0          13s
+  nginx-deployment-6dbd7f7b8c-9mrcn   1/1     Running   0          13s
+  nginx-deployment-6dbd7f7b8c-mjxtp   1/1     Running   0          3m24s
+  nginx-deployment-6dbd7f7b8c-xd7fx   1/1     Running   0          13s
+
+6. to scale down deployment
+  kubectl scale deployment/nginx-deployment -n nginx --replicas=1
+  deployment.apps/nginx-deployment scaled
+
+7. now pods are down to 1
+  kubectl get pods -n nginx
+  NAME                                READY   STATUS    RESTARTS   AGE
+  nginx-deployment-6dbd7f7b8c-42njn   1/1     Running   0          4m14s
+  
+
+
