@@ -1,0 +1,73 @@
+kind: CronJob
+apiVersion: batch/v1
+metadata:
+  name: minute-backup
+  namespace: nginx
+
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          name: minute-backup
+          labels:
+            app: minute-backup
+
+        spec:
+          containers:
+          - name: back-container
+            image: busybox
+            command:
+            - sh
+            - -c
+            - >
+              echo "Backup started" ;
+              mkdir -p /backups &&
+              mkdir -p /demo-data &&
+              cp -r /demo-data /backups &&
+              echo "Backup Completed" ;
+            volumeMounts:   #helps create folder to temporarily store data
+              - name: data-volume
+                mountPath: /demo-data
+              - name: backup-volume
+                mountPath: /backups
+          restartPolicy: OnFailure
+          volumes:
+            - name: data-volume
+              hostPath:
+                path: /demo-data
+                type: DirectoryOrCreate
+            - name: backup-volume
+              hostPath:
+                path: /backups-data
+                type: DirectoryOrCreate
+
+#Output:
+
+1. apply or create cron-job
+  kubectl apply -f cron-job.yml 
+  cronjob.batch/minute-backup created
+
+2. view cronjobs
+  kubectl get cronjobs -n nginx
+  NAME            SCHEDULE    SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+  minute-backup   * * * * *   False     0        5s              68s
+
+3. after 1min
+  kubectl get pods -n nginx
+  NAME                           READY   STATUS      RESTARTS   AGE
+  minute-backup-29588590-mxkfm   0/1     Completed   0          89s
+  minute-backup-29588591-hf7wh   0/1     Completed   0          29s
+  after 2min
+  kubectl get pods -n nginx
+  NAME                           READY   STATUS      RESTARTS   AGE
+  minute-backup-29588590-mxkfm   0/1     Completed   0          2m35s
+  minute-backup-29588591-hf7wh   0/1     Completed   0          95s
+  minute-backup-29588592-lpdjx   0/1     Completed   0          35s
+
+4. logs
+  kubectl logs pod/minute-backup-29588590-mxkfm -n nginx
+  Backup started
+  Backup Completed
+
