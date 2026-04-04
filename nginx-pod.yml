@@ -10,7 +10,7 @@ spec:
     ports:
     - containerPort: 80 #nginx runs on port 80
 
-Output:
+# Output:
 1. To create and apply manifest
   kubectl apply -f pod.yml 
   pod/nginx-pod created
