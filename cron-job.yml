@@ -50,7 +50,7 @@ spec:
   cronjob.batch/minute-backup created
 
 2. view cronjobs
-  kubectl get cronjobs -n nginx
+  kubectl get cronjob -n nginx
   NAME            SCHEDULE    SUSPEND   ACTIVE   LAST SCHEDULE   AGE
   minute-backup   * * * * *   False     0        5s              68s
 
