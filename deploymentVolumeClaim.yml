@@ -1,0 +1,47 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nginx-deployment
+  namespace: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+
+  template:
+    metadata:
+      name: nginx-dep-pod
+      labels:
+        app: nginx
+
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /var/www/html
+          name: my-volume
+      volumes:
+        - name: my-volume
+          persistentVolumeClaim:
+            claimName: local-pvc
+
+
+#Output:
+
+1. create or apply deployment with persistent Volume claim
+  kubectl apply -f deployment.yml 
+  deployment.apps/nginx-deployment created
+
+2. kubectl get pv -n nginx
+  NAME       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM             STORAGECLASS    VOLUMEATTRIBUTESCLASS   REASON   AGE
+  local-pv   1Gi        RWO            Retain           Bound    nginx/local-pvc   local-storage   <unset>                          25s
+
+3. pods are running after volume claim
+  kubectl get pods -n nginx
+  NAME                              READY   STATUS    RESTARTS   AGE
+  nginx-deployment-778bc58c-854jx   1/1     Running   0          5m18s
+  nginx-deployment-778bc58c-n57bh   1/1     Running   0          5m18s
