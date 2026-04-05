@@ -1,0 +1,27 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: local-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: local-storage
+
+#Output:
+
+1. create or apply persistenVolumeClaim
+  kubectl apply -f persistentVolumeClaim.yml 
+  persistentvolumeclaim/local-pvc created
+
+2. after claim status changes to bound 
+  kubectl get pv
+  NAME       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM               STORAGECLASS    VOLUMEATTRIBUTESCLASS   REASON   AGE
+  local-pv   1Gi        RWO            Retain           Bound    default/local-pvc   local-storage   <unset>                          9m26s
+
+3. local pvc bound to local storage
+  kubectl get pvc
+  NAME        STATUS   VOLUME     CAPACITY   ACCESS MODES   STORAGECLASS    VOLUMEATTRIBUTESCLASS   AGE
+  local-pvc   Bound    local-pv   1Gi        RWO            local-storage   <unset>                 45s
