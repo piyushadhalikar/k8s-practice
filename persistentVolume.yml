@@ -24,3 +24,7 @@ spec:
   kubectl get pv
   NAME       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS    VOLUMEATTRIBUTESCLASS   REASON   AGE
   local-pv   1Gi        RWO            Retain           Available           local-storage   <unset>                          20s
+
+3. delete pv
+  kubectl delete pv/local-pv
+  persistentvolume "local-pv" deleted
