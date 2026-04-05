@@ -2,6 +2,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: local-pvc
+  namespace: nginx
 spec:
   accessModes:
     - ReadWriteOnce
@@ -25,3 +26,7 @@ spec:
   kubectl get pvc
   NAME        STATUS   VOLUME     CAPACITY   ACCESS MODES   STORAGECLASS    VOLUMEATTRIBUTESCLASS   AGE
   local-pvc   Bound    local-pv   1Gi        RWO            local-storage   <unset>                 45s
+
+4. delete pvc
+  kubectl delete pvc/local-pvc
+  persistentvolumeclaim "local-pvc" deleted
