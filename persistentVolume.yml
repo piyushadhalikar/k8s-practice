@@ -1,0 +1,25 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv
+  labels:
+    app: local
+spec:
+  capacity: 
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  hostPath:
+    path: /mnt/data
+
+#Output:
+1. create persistent volume
+  kubectl apply -f persistentVolume.yml 
+  persistentvolume/local-pv created
+
+2. to view persistent volumes
+  kubectl get pv
+  NAME       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS    VOLUMEATTRIBUTESCLASS   REASON   AGE
+  local-pv   1Gi        RWO            Retain           Available           local-storage   <unset>                          20s
