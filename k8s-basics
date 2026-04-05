@@ -46,5 +46,16 @@
   NAME                                READY   STATUS    RESTARTS   AGE   IP                NODE              NOMINATED NODE   READINESS GATES
   nginx-deployment-6dbd7f7b8c-42njn   1/1     Running   0          15m   192.168.153.135   ip-172-31-11-50   <none>           <none>
 
+11. to view all in specfic namespace
+  kubectl get all -n  nginx
+  NAME                                  READY   STATUS    RESTARTS   AGE
+  pod/nginx-deployment-778bc58c-854jx   1/1     Running   0          28m
+  pod/nginx-deployment-778bc58c-n57bh   1/1     Running   0          28m
+
+  NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
+  deployment.apps/nginx-deployment   2/2     2            2           28m
+
+  NAME                                        DESIRED   CURRENT   READY   AGE
+  replicaset.apps/nginx-deployment-778bc58c   2         2         2       28m
 
 
