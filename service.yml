@@ -1,0 +1,24 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: nginx-service
+  namespace: nginx
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80  #outside port
+      targetPort: 80 #pod's port
+      nodePort: 30007 #expose to access from browser
+  type: NodePort
+
+#Output:
+1. to apply or create service
+  kubectl apply -f service.yml -n nginx
+  service/nginx-service created
+
+2. to view service 
+  kubectl get service -n nginx
+  NAME            TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+  nginx-service   NodePort   10.106.236.230   <none>        80:30007/TCP   39m
