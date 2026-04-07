@@ -34,13 +34,70 @@ spec:
   - metadata:
       name: mysql-data
     spec:
+      storageClassName: local-path
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
           storage: 1Gi
+
 
 #Output:
 
 1. create or apply
   kubectl apply -f statefulset.yml 
   statefulset.apps/mysql-statefulset created
+2. 3pods created
+  kubectl get pods -n mysql
+  NAME                  READY   STATUS    RESTARTS   AGE
+  mysql-statefulset-0   1/1     Running   0          35s
+  mysql-statefulset-1   1/1     Running   0          19s
+  mysql-statefulset-2   1/1     Running   0          12s
+
+3. 3pvc created in local path
+  kubectl get pvc -n mysql
+  NAME                             STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+  mysql-data-mysql-statefulset-0   Bound    pvc-b37780ca-5a4f-411d-bafc-485f4ece4d6f   1Gi        RWO            local-path     <unset>                 22s
+  mysql-data-mysql-statefulset-1   Bound    pvc-109f7e13-66bb-472b-85b0-ea3c609bba8e   1Gi        RWO            local-path     <unset>                 6s
+
+4. get service 
+  kubectl get svc -n mysql
+  NAME            TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)    AGE
+  mysql-service   ClusterIP   None         <none>        3306/TCP   10m
+
+5. connect to mysql pod and check devops database is created or not.
+  kubectl exec -it mysql-statefulset-0 -n mysql -- bash
+  bash-5.1# mysql -u root -p
+  Enter password: 
+  Welcome to the MySQL monitor.  Commands end with ; or \g.
+  Your MySQL connection id is 8
+  Server version: 8.4.8 MySQL Community Server - GPL
+
+  Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+  Oracle is a registered trademark of Oracle Corporation and/or its
+  affiliates. Other names may be trademarks of their respective
+  owners.
+
+  Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+  mysql> show databases;
+  +--------------------+
+  | Database           |
+  +--------------------+
+  | devops             |
+  | information_schema |
+  | mysql              |
+  | performance_schema |
+  | sys                |
+  +--------------------+
+  5 rows in set (0.00 sec)
+
+6. If we delete a pod, new pod is created with same name to maintain the state
+  kubectl delete pod mysql-statefulset-0 -n mysql
+  pod "mysql-statefulset-0" deleted
+
+  kubectl get pods -n mysql
+  NAME                  READY   STATUS    RESTARTS   AGE
+  mysql-statefulset-0   1/1     Running   0          13s
+  mysql-statefulset-1   1/1     Running   0          15m
+  mysql-statefulset-2   1/1     Running   0          15m
