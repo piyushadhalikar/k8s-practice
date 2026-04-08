@@ -1,0 +1,19 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: mysql-config-map
+  namespace: mysql
+data:
+  MYSQL_DATABASE: devops
+
+#Output:
+
+1. create configmap
+  kubectl apply -f configMap.yml 
+  configmap/mysql-config-map created
+
+2. show configmap
+  kubectl get configmap -n mysql
+  NAME               DATA   AGE
+  kube-root-ca.crt   1      40s
+  mysql-config-map   1      19s
