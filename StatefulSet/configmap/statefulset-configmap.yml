@@ -48,3 +48,12 @@ spec:
 1. create with configmap
   kubectl apply -f statefulset.yml 
   statefulset.apps/mysql-statefulset created
+
+2. get pods
+  kubectl get pods -n mysql
+  NAME                  READY   STATUS    RESTARTS   AGE
+  mysql-statefulset-0   1/1     Running   0          2m59s
+  mysql-statefulset-1   1/1     Running   0          2m54s
+  mysql-statefulset-2   1/1     Running   0          2m49s
+
+3. 
