@@ -1,0 +1,119 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nginx-deployment
+  namespace: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+
+  template:
+    metadata:
+      name: nginx-dep-pod
+      labels:
+        app: nginx
+
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+        volumeMounts:
+        - mountPath: /var/www/html
+          name: my-volume
+      volumes:
+        - name: my-volume
+          persistentVolumeClaim:
+            claimName: local-pvc
+
+#Output:
+
+1. create
+  kubectl apply -f deployment.yml 
+  deployment.apps/nginx-deployment created
+
+2. get pods 
+  kubectl get pods -n nginx
+  NAME                                READY   STATUS    RESTARTS   AGE
+  nginx-deployment-8649b495d7-gbwlw   1/1     Running   0          30m
+  nginx-deployment-8649b495d7-zctrz   1/1     Running   0          30m
+
+3. check if limit added for pod
+  kubectl describe pod nginx-deployment-8649b495d7-gbwlw -n nginx
+  Name:             nginx-deployment-8649b495d7-gbwlw
+  Namespace:        nginx
+  Priority:         0
+  Service Account:  default
+  Node:             ip-172-31-11-50/172.31.11.50
+  Start Time:       Wed, 08 Apr 2026 12:59:13 +0000
+  Labels:           app=nginx
+                    pod-template-hash=8649b495d7
+  Annotations:      cni.projectcalico.org/containerID: b7d496bc283ac7134112c73edea106ac4dfd8635c8143597ab37a635babea2ec
+                    cni.projectcalico.org/podIP: 192.168.153.187/32
+                    cni.projectcalico.org/podIPs: 192.168.153.187/32
+  Status:           Running
+  IP:               192.168.153.187
+  IPs:
+    IP:           192.168.153.187
+  Controlled By:  ReplicaSet/nginx-deployment-8649b495d7
+  Containers:
+    nginx:
+      Container ID:   containerd://737a0067b5c09ec560b47110cf5bb5d3e956fa6c5b0dd34e8094877781ceaf09
+      Image:          nginx:latest
+      Image ID:       docker.io/library/nginx@sha256:7f0adca1fc6c29c8dc49a2e90037a10ba20dc266baaed0988e9fb4d0d8b85ba0
+      Port:           80/TCP
+      Host Port:      0/TCP
+      State:          Running
+        Started:      Wed, 08 Apr 2026 12:59:20 +0000
+      Ready:          True
+      Restart Count:  0
+      Limits:
+        cpu:     200m
+        memory:  256Mi
+      Requests:
+        cpu:        100m
+        memory:     128Mi
+      Environment:  <none>
+      Mounts:
+        /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-tj9cf (ro)
+        /var/www/html from my-volume (rw)
+  Conditions:
+    Type                        Status
+    PodReadyToStartContainers   True 
+    Initialized                 True 
+    Ready                       True 
+    ContainersReady             True 
+    PodScheduled                True 
+  Volumes:
+    my-volume:
+      Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+      ClaimName:  local-pvc
+      ReadOnly:   false
+    kube-api-access-tj9cf:
+      Type:                    Projected (a volume that contains injected data from multiple sources)
+      TokenExpirationSeconds:  3607
+      ConfigMapName:           kube-root-ca.crt
+      ConfigMapOptional:       <nil>
+      DownwardAPI:             true
+  QoS Class:                   Burstable
+  Node-Selectors:              <none>
+  Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                               node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+  Events:
+    Type    Reason     Age   From               Message
+    ----    ------     ----  ----               -------
+    Normal  Scheduled  31m   default-scheduler  Successfully assigned nginx/nginx-deployment-8649b495d7-gbwlw to ip-172-31-11-50
+    Normal  Pulling    31m   kubelet            Pulling image "nginx:latest"
+    Normal  Pulled     30m   kubelet            Successfully pulled image "nginx:latest" in 6.461s (6.461s including waiting)
+    Normal  Created    30m   kubelet            Created container: nginx
+    Normal  Started    30m   kubelet            Started container nginx
