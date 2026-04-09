@@ -1,0 +1,36 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: apache-hpa
+  namespace: apache
+
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    name: apache-deployment
+    apiVersion: apps/v1
+
+  minReplicas: 1
+  maxReplicas: 3
+
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 5
+
+#Output:
+
+1. create hpa 
+  kubectl apply -f hpa.yml 
+  horizontalpodautoscaler.autoscaling/apache-hpa created
+
+2. show hpa
+  kubectl get hpa -n apache
+  NAME         REFERENCE                      TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+  apache-hpa   Deployment/apache-deployment   1%/5%     1         3         1          37s
+
+3. to generate load 
+  kubectl run -i --tty load-generator --image=busybox -n apache /bin/sh
