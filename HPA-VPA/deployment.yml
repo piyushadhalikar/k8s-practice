@@ -28,3 +28,18 @@ spec:
             cpu: 200m
             memory: 256Mi
 
+#Output:
+
+1. get all
+  kubectl get all -n apache
+  NAME                                     READY   STATUS    RESTARTS   AGE
+  pod/apache-deployment-678bb5cfbf-kz296   1/1     Running   0          17m
+
+  NAME                     TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+  service/apache-service   NodePort   10.96.186.252   <none>        80:30007/TCP   7m34s
+
+  NAME                                READY   UP-TO-DATE   AVAILABLE   AGE
+  deployment.apps/apache-deployment   1/1     1            1           17m
+
+  NAME                                           DESIRED   CURRENT   READY   AGE
+  replicaset.apps/apache-deployment-678bb5cfbf   1         1         1       17m
