@@ -1,0 +1,40 @@
+kind: DevOpsBatch
+apiVersion: devops.group/v1
+metadata:
+  name: batch1
+spec:
+  name: devops course
+  duration: 2 months
+  platform: platform
+  mode: live
+
+#Output:
+
+1. create custom resource definition
+  kubectl apply -f devops-cr.yml 
+  devopsbatch.devops.group/batch1 created
+
+2. get batches
+  kubectl get devopsbatches
+  NAME     AGE
+  batch1   20s
+
+3. decribe batch 
+  kubectl describe batch1
+  Name:         batch1
+  Namespace:    default
+  Labels:       <none>
+  Annotations:  <none>
+  API Version:  devops.group/v1
+  Kind:         DevOpsBatch
+  Metadata:
+    Creation Timestamp:  2026-04-11T14:51:04Z
+    Generation:          1
+    Resource Version:    109394
+    UID:                 eb0f961c-9b7d-4665-89f9-5dc82c9bc2b7
+  Spec:
+    Duration:  2 months
+    Mode:      live
+    Name:      devops course
+    Platform:  platform
+    Events:      <none>
