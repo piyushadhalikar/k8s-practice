@@ -1,0 +1,51 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: devopsbatches.devops.group
+spec:
+  group: devops.group
+  names:
+    plural: devopsbatches
+    singular: devopsbatch
+    kind: DevOpsBatch
+    shortNames:
+      - batch1
+      - batch2
+  scope: Namespaced
+  versions:
+  - name: v1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties: 
+          spec:
+            type: object
+            properties:
+              name:
+                type: string
+                description: "This is the name of DevOps Batch"
+              duration:
+                type: string
+                description: "This is the duration of the DevOps Batch"
+              mode:
+                type: string
+                description: "This is the mode of the batch"
+              platform:
+                type: string
+                description: "This is the platform for batch"
+
+
+#Output:
+
+1. create crd
+  kubectl apply -f devops-crd.yml 
+  customresourcedefinition.apiextensions.k8s.io/devopsbatches.devops.group created
+
+2. view crd
+  kubectl get crd
+  NAME                                                  CREATED AT
+  devopsbatches.devops.group                            2026-04-11T14:45:00Z
+  verticalpodautoscalercheckpoints.autoscaling.k8s.io   2026-04-10T08:35:14Z
+  verticalpodautoscalers.autoscaling.k8s.io             2026-04-10T08:35:14Z
