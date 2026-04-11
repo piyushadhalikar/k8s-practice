@@ -5,8 +5,9 @@ metadata:
   namespace: apache
 rules:
   - apiGroups: ["","apps","rbac.authorization.k8s.io","batch"]
-    resources: ["deployment","pod","service"]
+    resources: ["deployments","pods","services"]
     verbs: ["get","apply","delete","watch","create","patch"]
+
 
 #Output:
 
@@ -20,8 +21,30 @@ rules:
   apache-manager   2026-04-11T12:34:34Z
 
 3. get pod in namespace for specific user
-  kubectl auth can-i get pod -n apache --as=apache-user
+  kubectl auth can-i get pods -n apache --as=apache-user
   no (because there is no role-binding)
 
+4. after role-binding
+  kubectl auth can-i get pods --as=apache-user -n apache
+  yes
+
+5. for deployment before
+  kubectl auth can-i get deployments --as=apache-user -n apache
+  no
+  after
+  kubectl auth can-i get deployments --as=apache-user -n apache
+  yes
+
+
+6. for service before
+  kubectl auth can-i get services --as=apache-user -n apache
+  no
+  after
+  kubectl auth can-i get services --as=apache-user -n apache
+  yes
+
+7. can user delete pods
+  kubectl auth can-i delete pods --as=apache-user -n apache
+  yes
 
 
