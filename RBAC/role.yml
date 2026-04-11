@@ -19,4 +19,9 @@ rules:
   NAME             CREATED AT
   apache-manager   2026-04-11T12:34:34Z
 
-3. 
+3. get pod in namespace for specific user
+  kubectl auth can-i get pod -n apache --as=apache-user
+  no (because there is no role-binding)
+
+
+
