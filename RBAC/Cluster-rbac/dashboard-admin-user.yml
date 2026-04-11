@@ -1,0 +1,28 @@
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: admin-user
+  namespace: kubernetes-dashboard
+
+---  #close on yml file and add 2nd yml file
+
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: admin-user-binding
+  namespace: kubernetes-dashboard
+subjects:
+- kind: ServiceAccount
+  name: admin-user
+  namespace: kubernetes-dashboard
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+
+#Output:
+
+1. create cluster-role binding
+  kubectl apply -f dashboard-admin-user.yml 
+  serviceaccount/admin-user created
+  clusterrolebinding.rbac.authorization.k8s.io/admin-user-binding created
