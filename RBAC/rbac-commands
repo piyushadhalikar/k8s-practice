@@ -1,0 +1,23 @@
+1. show current user info
+  kubectl auth whoami
+  ATTRIBUTE   VALUE
+  Username    kubernetes-admin
+  Groups      [kubeadm:cluster-admins system:authenticated]
+
+2. if user has permission to get pod
+  kubectl auth can-i get pod
+  yes
+
+3. if user has permission to get pod in particular namespace
+  kubectl auth can-i get pod -n apache
+  yes
+
+4. if user has permission to get deployment in particular namespace
+  kubectl auth can-i get deployment -n apache
+  yes
+
+5. if user has permission to delete deployment in particular namespace
+  kubectl auth can-i delete deployment -n apache
+  yes
+
+6. 
