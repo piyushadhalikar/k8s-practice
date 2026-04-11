@@ -26,3 +26,15 @@ roleRef:
   kubectl apply -f dashboard-admin-user.yml 
   serviceaccount/admin-user created
   clusterrolebinding.rbac.authorization.k8s.io/admin-user-binding created
+
+2. kubectl -n kubernetes-dashboard create token admin-user
+  eyJhbGciOiJSUzI1NiIsImtpZCI6IkVIRE5FaTg1ZldKOGRoR2s3WW1EZGx1YWVGYjFkTHp4blVwc2VXRWhOSlkifQ.eyJhdWQiOlsiaHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3ZjLmNsdXN0ZXIubG9jYWwiXSwiZXhwIjoxNzc1OTE4OTI2LCJpYXQiOjE3NzU5MTUzMjYsImlzcyI6Imh0dHBzOi8va3ViZXJuZXRlcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwia3ViZXJuZXRlcy5pbyI6eyJuYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsInNlcnZpY2VhY2NvdW50Ijp7Im5hbWUiOiJhZG1pbi11c2VyIiwidWlkIjoiYmIwMGEwZTItYzMzYS00NGU4LWI0MzYtODExNGJmMTUxN2UxIn19LCJuYmYiOjE3NzU5MTUzMjYsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDprdWJlcm5ldGVzLWRhc2hib2FyZDphZG1pbi11c2VyIn0.TCplKOCl4tR7yBT3c21gGtXSVYxgvLGjf6gtD2F3fdcdRL1_adVfqGZYeHo2Kwt9OJnNMgRG--DKARwTEIx36brvPLLbj4AcN_MeG5u2-kPMuHRjLajtQ0SLxzgTu5G0QWlADD1y77OUXuKsjPoj_eiAWfhbIhsxLVFyFoCrkDC_5rnnZ1KvFOPAlpOe8PvyMPjSmD6tPdvtZz8z5MZ4nNpHq6nrPzTy7gENmMEVJ1UX_s7QyQTjz8wbTqRgZldBCE8HYlHwaQre2r7e1Ktk-YouSemL3MjhOR598nF37-fI66KSV14NqupwAnLCYMHjhaqEmtsZY8KE50-4zG8qEg
+
+3. to access externally on browser
+              kubectl proxy \
+  --address=0.0.0.0 \
+  --accept-hosts='^.*$' \
+  --accept-paths='^.*$'
+  Starting to serve on [::]:8001
+
+4. access it on browser on instanceIP:8001 after opening it in security group
