@@ -1,0 +1,98 @@
+1. Create helm chart
+  helm create apache-helm
+  Creating apache-helm
+
+2. files inside helm chart
+  /apache-helm$ ls
+  Chart.yaml  charts  templates  values.yaml
+
+3. files created inside helm chart in tree format
+  tree
+.
+  ├── Chart.yaml
+  ├── charts
+  ├── templates
+  │   ├── NOTES.txt
+  │   ├── _helpers.tpl
+  │   ├── deployment.yaml
+  │   ├── hpa.yaml
+  │   ├── httproute.yaml
+  │   ├── ingress.yaml
+  │   ├── service.yaml
+  │   ├── serviceaccount.yaml
+  │   └── tests
+  │       └── test-connection.yaml
+  └── values.yaml
+
+  4 directories, 11 files
+
+4. package folder after all changes in values.yaml and Chart.yaml
+  helm package apache-helm/
+  Successfully packaged chart and saved it to: /home/ubuntu/kubernetes-practice/helm/apache-helm-0.1.0.tgz
+
+5. new .tgz folder created
+  ls
+  apache-helm  apache-helm-0.1.0.tgz  get_helm.sh
+
+6. get pods
+  kubectl get pods
+  NAME                                      READY   STATUS    RESTARTS   AGE
+  dev-apache-apache-helm-7758f85789-hbdz2   1/1     Running   0          6m5s
+  dev-apache-apache-helm-7758f85789-xdxcx   1/1     Running   0          6m5s
+
+7. get service
+  kubectl get svc
+  NAME                     TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
+  dev-apache-apache-helm   ClusterIP   10.101.237.184   <none>        80/TCP    6m29s
+  kubernetes               ClusterIP   10.96.0.1        <none>        443/TCP   9d  
+  nginx-service            ClusterIP   10.109.203.129   <none>        80/TCP    6d23h
+
+8. get deployment
+  kubectl get deployment
+  NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
+  dev-apache-apache-helm   2/2     2            2           6m52s
+
+9. to delete helm chart
+  helm uninstall dev-apache
+  release "dev-apache" uninstalled
+
+10. create chart in specific namespace
+  helm install dev-apache apache-helm -n dev-apache --create-namespace
+  NAME: dev-apache
+  LAST DEPLOYED: Sun Apr 12 10:41:21 2026
+  NAMESPACE: dev-apache
+  STATUS: deployed
+  REVISION: 1
+  DESCRIPTION: Install complete
+  NOTES:
+  1. Get the application URL by running these commands:
+    export POD_NAME=$(kubectl get pods --namespace dev-apache -l "app.kubernetes.io/name=apache-helm,app.kubernetes.io/instance=dev-apache" -o jsonpath="{.items[0].metadata.name}")
+    export CONTAINER_PORT=$(kubectl get pod --namespace dev-apache $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+    echo "Visit http://127.0.0.1:8080 to use your application"
+    kubectl --namespace dev-apache port-forward $POD_NAME 8080:$CONTAINER_PORT
+
+11. upgrade after making changes in values.yaml
+  helm upgrade dev-apache apache-helm -n dev-apache
+  Release "dev-apache" has been upgraded. Happy Helming!
+  NAME: dev-apache
+  LAST DEPLOYED: Sun Apr 12 10:46:04 2026
+  NAMESPACE: dev-apache
+  STATUS: deployed
+  REVISION: 2
+  DESCRIPTION: Upgrade complete
+  NOTES:
+  1. Get the application URL by running these commands:
+    export POD_NAME=$(kubectl get pods --namespace dev-apache -l "app.kubernetes.io/name=apache-helm,app.kubernetes.io/instance=dev-apache" -o jsonpath="{.items[0].metadata.name}")
+    export CONTAINER_PORT=$(kubectl get pod --namespace dev-apache $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+    echo "Visit http://127.0.0.1:8080 to use your application"
+    kubectl --namespace dev-apache port-forward $POD_NAME 8080:$CONTAINER_PORT
+
+12. kubectl get pods -n dev-apache
+  NAME                                      READY   STATUS    RESTARTS   AGE
+  dev-apache-apache-helm-7758f85789-sf5pz   1/1     Running   0          5m55s
+  dev-apache-apache-helm-7758f85789-txzsl   1/1     Running   0          73s
+  dev-apache-apache-helm-7758f85789-w9wff   1/1     Running   0          5m25s
+
+13. rollback to previous helm version
+  helm rollback dev-apache 1 -n dev-apache
+  Rollback was a success! Happy Helming!
